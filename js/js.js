@@ -232,31 +232,100 @@ function addReward(tile_row, tile_cell, tile_cell_vert, reward_tier, character){
 				var received_reward = JSON.parse(data);
 				var reward_name = received_reward.reward.name;
 				var reward_type = received_reward.reward.type;
-
+				jQuery('#proto-map').append('<div class="new-reward"></div>');
 				var playerCharHealth = playerChar.modifiers.health;
 				var playerCharAttack = playerChar.modifiers.attack;
 				var playerCharDefence = playerChar.modifiers.defence;
 				var playerCharMovement = playerChar.modifiers.move;
 
 				if(reward_type === "modifier"){
+					jQuery('#proto-map .new-reward').append(''+
+						'<input type="hidden" name="modifier-health" value="'+received_reward.reward.stats.health+'"/>'+
+						'<input type="hidden" name="modifier-attack" value="'+received_reward.reward.stats.attack+'"/>'+
+						'<input type="hidden" name="modifier-defence" value="'+received_reward.reward.stats.defence+'"/>'+
+						'<input type="hidden" name="modifier-move" value="'+received_reward.reward.stats.move+'"/>'+
+						'<h3>New Item Found!</h3>'+
+						'<img src="'+received_reward.reward.image+'"/>'+
+						'<input type="submit" class="accept_item" value="Use Item"/>'+
+						'<input type="submit" class="decline_item" value="Ignore Item"/>'
+					);
+/*
 					playerChar.modifiers.health = playerCharHealth + parseInt(received_reward.reward.stats.health);
 					playerChar.modifiers.attack = playerCharAttack + parseInt(received_reward.reward.stats.attack);
 					playerChar.modifiers.defence = playerCharDefence + parseInt(received_reward.reward.stats.defence);
 					playerChar.modifiers.move = playerCharMovement + parseInt(received_reward.reward.stats.move);
+*/
 				}
 				else {
+					jQuery('#proto-map .new-reward').append(''+
+						'<input type="hidden" name="equipment-type" value="'+reward_type+'"/>'+
+						'<input type="hidden" name="equipment-health" value="'+received_reward.reward.stats.health+'"/>'+
+						'<input type="hidden" name="equipment-attack" value="'+received_reward.reward.stats.attack+'"/>'+
+						'<input type="hidden" name="equipment-defence" value="'+received_reward.reward.stats.defence+'"/>'+
+						'<input type="hidden" name="equipment-move" value="'+received_reward.reward.stats.move+'"/>'+
+						'<h3>New Item Found!</h3>'+
+						'<h4>'+reward_name+'</h4>'+
+						'<div class="health"></div>'+
+						'<div class="attack"></div>'+
+						'<div class="defence"></div>'+
+						'<div class="movement"></div>'+
+						'<input type="submit" class="accept_item" value="Equip Item"/>'+
+						'<input type="submit" class="decline_item" value="Ignore Item"/>'
+					);
+/*
 					playerChar.equipment[reward_type].name = reward_name;
 					playerChar.equipment[reward_type].health = parseInt(received_reward.reward.stats.health);
 					playerChar.equipment[reward_type].attack = parseInt(received_reward.reward.stats.attack);
 					playerChar.equipment[reward_type].defence = parseInt(received_reward.reward.stats.defence);
 					playerChar.equipment[reward_type].move = parseInt(received_reward.reward.stats.move);
+*/
 				}
+				jQuery('.new-reward').fadeIn();
+				jQuery('.new-reward').show();
 				initializePlayer(playerChar);
-				
-				console.log(playerChar);
 		    }
 	    }
 	});
+}
+
+function acceptItem(character){
+	var playerChar = character;
+	var playerCharHealth = playerChar.modifiers.health;
+	var playerCharAttack = playerChar.modifiers.attack;
+	var playerCharDefence = playerChar.modifiers.defence;
+	var playerCharMovement = playerChar.modifiers.move;
+
+	var reward = jQuery('.new-reward');
+
+	if(jQuery(reward).find('input[name="modifier-health"]').length){
+		var reward_health = jQuery(reward).find('input[name="modifier-health"]').val();
+		var reward_attack = jQuery(reward).find('input[name="modifier-attack"]').val();
+		var reward_defence = jQuery(reward).find('input[name="modifier-defence"]').val();
+		var reward_move = jQuery(reward).find('input[name="modifier-move"]').val();
+		playerChar.modifiers.health = playerCharHealth + parseInt(reward_health);
+		playerChar.modifiers.attack = playerCharAttack + parseInt(reward_attack);
+		playerChar.modifiers.defence = playerCharDefence + parseInt(reward_defence);
+		playerChar.modifiers.move = playerCharMovement + parseInt(reward_move);
+	}
+	else {
+		var reward_name = jQuery(reward).find('h4').html();
+		var reward_type = jQuery(reward).find('input[name="equipment-type"]').val();
+		var reward_health = jQuery(reward).find('input[name="equipment-health"]').val();
+		var reward_attack = jQuery(reward).find('input[name="equipment-attack"]').val();
+		var reward_defence = jQuery(reward).find('input[name="equipment-defence"]').val();
+		var reward_move = jQuery(reward).find('input[name="equipment-move"]').val();
+
+		playerChar.equipment[reward_type].name = reward_name;
+		playerChar.equipment[reward_type].health = parseInt(reward_health);
+		playerChar.equipment[reward_type].attack = parseInt(reward_attack);
+		playerChar.equipment[reward_type].defence = parseInt(reward_defence);
+		playerChar.equipment[reward_type].move = parseInt(reward_move);
+	}
+	initializePlayer(playerChar);
+	jQuery('.new-reward').fadeOut();
+	setTimeout(function(){
+		jQuery('.new-reward').remove();
+	},1000);
 }
 
 function checkDead(character){
@@ -461,6 +530,21 @@ jQuery(document).ready(function(){
 				jQuery(monsterBox).find('.hit').remove();
 				jQuery(monsterBox).find('.block').remove();
 				checkDead(character);
+			},1000);
+		});
+
+	/* Accept Item */
+		jQuery(document).on('click','.new-reward .accept_item',function(e){
+			e.preventDefault();
+			acceptItem(character);
+		});
+
+	/* Decline Item */
+		jQuery(document).on('click','.new-reward .decline_item',function(e){
+			e.preventDefault();
+			jQuery('.new-reward').fadeOut();
+			setTimeout(function(){
+				jQuery('.new-reward').remove();
 			},1000);
 		});
 
