@@ -131,9 +131,9 @@ function initializePlayer(character){
 	for(i=0;i<countObject(allCharStats);i++){
 		var thisStat = allCharStats_array[i];
 		var thisStatVal = allCharStats[thisStat];
-		jQuery('#player').find('.'+thisStat).html('');
+		jQuery('#player > div.'+thisStat).html('');
 		for(r=0;r<thisStatVal;r++){
-			jQuery('#player').find('.'+thisStat).append('<div></div>');
+			jQuery('#player > div.'+thisStat).append('<div></div>');
 		}
 	}
 
@@ -198,15 +198,16 @@ function attack(tile_row, tile_cell, tile_cell_vert, character){
 		returnvar.push({playerHit:playerAttack});
 	}
 
-	if(Math.floor(Math.random()*100 <= playerDefence)) {
+	if(Math.floor(monsterAttack - playerDefence) <= 0) {
 		returnvar.push({monsterHit:0});
 	}
 	else {
-		for(i=0; i<monsterAttack;i++){
+		var monsterDamage = Math.floor(monsterAttack - playerDefence);
+		for(i=0; i<monsterDamage;i++){
 			jQuery('#player').find('.health').children('div').first().remove();
 		}
-		returnvar.push({monsterHit:monsterAttack});
-		player.modifiers.health += -monsterAttack;
+		returnvar.push({monsterHit:monsterDamage});
+		player.modifiers.health += -monsterDamage;
 	}
 	return returnvar;
 }
@@ -265,6 +266,7 @@ function addReward(tile_row, tile_cell, tile_cell_vert, reward_tier, character){
 						'<input type="hidden" name="equipment-move" value="'+received_reward.reward.stats.move+'"/>'+
 						'<h3>New Item Found!</h3>'+
 						'<h4>'+reward_name+'</h4>'+
+						'<img src="'+received_reward.reward.image+'"/>'+
 						'<div class="health"></div>'+
 						'<div class="attack"></div>'+
 						'<div class="defence"></div>'+
@@ -314,12 +316,33 @@ function acceptItem(character){
 		var reward_attack = jQuery(reward).find('input[name="equipment-attack"]').val();
 		var reward_defence = jQuery(reward).find('input[name="equipment-defence"]').val();
 		var reward_move = jQuery(reward).find('input[name="equipment-move"]').val();
+		var reward_image = jQuery(reward).find('img').attr('src');
 
 		playerChar.equipment[reward_type].name = reward_name;
 		playerChar.equipment[reward_type].health = parseInt(reward_health);
 		playerChar.equipment[reward_type].attack = parseInt(reward_attack);
 		playerChar.equipment[reward_type].defence = parseInt(reward_defence);
 		playerChar.equipment[reward_type].move = parseInt(reward_move);
+
+		jQuery('div#player .equipment .equip_items #equip_'+reward_type).html('<img src="'+reward_image+'"/>');
+		if(jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"]').length){
+			jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"] h5').html(reward_name);
+			jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"] .health .value').html(reward_health);
+			jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"] .attack .value').html(reward_attack);
+			jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"] .defence .value').html(reward_defence);
+			jQuery('div#player .equipment .equip_stats div[data-equipment="equip_'+reward_type+'"] .move .value').html(reward_move);
+		}
+		else {
+			jQuery('div#player .equipment .equip_stats').html(''+
+				'<div data-equipment="equip_'+reward_type+'">'+
+					'<h5>'+reward_name+'</h5>'+
+					'<div class="health">Health:<span class="value">'+reward_health+'</span></div>'+
+					'<div class="attack">Attack:<span class="value">'+reward_attack+'</span></div>'+
+					'<div class="defence">Defence:<span class="value">'+reward_defence+'</span></div>'+
+					'<div class="move">Move:<span class="value">'+reward_move+'</span></div>'+
+				'</div>'
+			);
+		}
 	}
 	initializePlayer(playerChar);
 	jQuery('.new-reward').fadeOut();
@@ -332,14 +355,11 @@ function checkDead(character){
 	var player = character;
 	var charStats = new characterStats(player);
 	var playerHealth = charStats.getStat('health');
-
 	if(playerHealth <= 0){
 		jQuery('#dead').fadeIn();
 	}
-
 	jQuery('.box[data-event-type="monster"]').each(function(){
 		var monsterHealth = parseInt(jQuery(this).find('.health').children('div').length);
-
 		if(monsterHealth <= 0){
 			jQuery(this).html('');
 			jQuery(this).attr('data-event-type','');
@@ -351,8 +371,6 @@ function checkDead(character){
 
 			addReward(current_row,current_cell,current_cell_vert,tier, character);
 		}
-
-		
 	});
 }
 
@@ -403,6 +421,12 @@ function getEventFunction(event_id) {
 function triggerFunction(functionName){
 	var trueFunction = functionName[0];
 	window[trueFunction]();
+}
+
+function checkForEnd(){
+	if(jQuery('.box.end.current').length){
+		jQuery('#complete').fadeIn();
+	}
 }
 
 jQuery(document).ready(function(){
@@ -493,6 +517,7 @@ jQuery(document).ready(function(){
 			var terrain = move(box_row, box_cell, box_cell_vert, movement);
 			triggerEvent(terrain);
 			randomAdjacentTile();
+			checkForEnd();
 		});
 
 	/* Attack */
@@ -546,6 +571,27 @@ jQuery(document).ready(function(){
 			setTimeout(function(){
 				jQuery('.new-reward').remove();
 			},1000);
+		});
+
+	/* Button Click */
+		jQuery(document).on('click','.button[data-button]',function(e){
+			e.preventDefault();
+			var button_target = jQuery(this).attr('data-button');
+			jQuery('.'+button_target).slideToggle();
+		});
+
+	/* Equipment Hover */
+		jQuery('.equip_items div').on({
+			mouseenter: function(){
+				console.log('in');
+				var hover_target = jQuery(this).attr('id');
+				jQuery('.equip_stats div[data-equipment="'+hover_target+'"]').show();
+			},
+			mouseleave: function(){
+				console.log('out');
+				var hover_target = jQuery(this).attr('id');
+				jQuery('.equip_stats div[data-equipment="'+hover_target+'"]').hide();
+			},
 		});
 
 });

@@ -7,30 +7,40 @@
 				<p>If you feel like playing again, you can reset the map with the button below.</p>
 				<input id="resetMap" type="submit"/>
 			</div>
+			<div id="complete">
+				<h2>Congratulations! You completed this level!</h2>
+				<input id="resetMap" type="submit" value="Restart Level"/>
+				<input id="resetMapwItems" type="submit" value="Restart Level with items"/>
+				<input id="NextMap" type="submit" value="Next Level"/>
+			</div>
 			<div id="player">
 				<div class="health"></div>
 				<div class="attack"></div>
 				<div class="defence"></div>
 				<div class="movement"></div>
-				<div class="equipment">
-					<div class="equip_cont">
-						<div class="equip_items">
-							<div id="equip_helmet" class="item"></div>
-							<div id="equip_armour" class="item"></div>
-							<div id="equip_weapon" class="item"></div>
-							<div id="equip_shield" class="item"></div>
-						</div>
-						<div class="equip_stats">
+				<div class="menu">
+					<div class="button" data-button="equipment">Equipment</div>
+					<div class="button" data-button="restart">Restart Level</div>
+					<div class="equipment">
+						<div class="equip_cont">
+							<div class="equip_items">
+								<div id="equip_helmet" class="item"></div>
+								<div id="equip_armour" class="item"></div>
+								<div id="equip_weapon" class="item"></div>
+								<div id="equip_shield" class="item"></div>
+							</div>
+							<div class="equip_stats">
 
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div id="proto-map">
 <?php
-			$map_id = 2;
-			if($get_map = mysqli_query($con, "SELECT * FROM map WHERE map_id = $map_id;")) {
+			if($get_map = mysqli_query($con, "SELECT * FROM map ORDER BY map_id LIMIT 1 ")) {
 		        while ($map = $get_map->fetch_assoc()) {
+		        	$map_id = $map['map_id'];
 		        	$get_map_structure = $map['map_structure'];
 		        	$map_structure = unserialize($get_map_structure);
 
