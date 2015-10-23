@@ -4,7 +4,7 @@
 		<div id="content">
 			<form method="post" id="form">
 <?php
-			if($get_map = mysqli_query($con, "SELECT * FROM map where map_id = 2")) {
+			if($get_map = mysqli_query($con, "SELECT * FROM map where map_id = 3")) {
 		        while ($map = $get_map->fetch_assoc()) {
 		        	$get_map_structure = $map['map_structure'];
 		        	$map_structure = unserialize($get_map_structure);
@@ -105,21 +105,9 @@
 /*
 			$array = array(
 				13,
+				13,
+				13,
 				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
 					3
 				),
 				array(
@@ -139,126 +127,7 @@
 					0,
 					3
 				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				array(
-					3,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					3
-				),
-				"width" => 19
+				"width" => 13
 			);
 
 			$serialized = serialize($array);

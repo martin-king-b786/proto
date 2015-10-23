@@ -2,25 +2,28 @@
 			include('header.php');
 ?>
 		<div id="content">
+			<div id="loading">
+				<h1>Loading</h1>
+			</div>
 			<div id="dead">
 				<h2>Oh Dear, you're dead.</h2>
 				<p>If you feel like playing again, you can reset the map with the button below.</p>
-				<input id="resetMap" type="submit"/>
+				<input id="resetMap" type="submit" value="Restart Level" data-button="restartTotal"/>
 			</div>
 			<div id="complete">
 				<h2>Congratulations! You completed this level!</h2>
-				<input id="resetMap" type="submit" value="Restart Level"/>
-				<input id="resetMapwItems" type="submit" value="Restart Level with items"/>
-				<input id="NextMap" type="submit" value="Next Level"/>
+				<input id="resetMap" type="submit" value="Restart Level" data-button="restartTotal"/>
+				<input id="resetMapwItems" type="submit" value="Restart Level with items" data-button="restart"/>
+				<input id="NextMap" type="submit" value="Next Level" data-button="next"/>
 			</div>
 			<div id="player">
-				<div class="health"></div>
-				<div class="attack"></div>
-				<div class="defence"></div>
-				<div class="movement"></div>
+				<div class="health bar"></div>
+				<div class="attack bar"></div>
+				<div class="defence bar"></div>
+				<div class="movement bar"></div>
 				<div class="menu">
 					<div class="button" data-button="equipment">Equipment</div>
-					<div class="button" data-button="restart">Restart Level</div>
+					<div class="button" data-button="restartTotal">Restart Level</div>
 					<div class="equipment">
 						<div class="equip_cont">
 							<div class="equip_items">
@@ -41,6 +44,9 @@
 			if($get_map = mysqli_query($con, "SELECT * FROM map ORDER BY map_id LIMIT 1 ")) {
 		        while ($map = $get_map->fetch_assoc()) {
 		        	$map_id = $map['map_id'];
+?>
+					<input type="hidden" id="currentlevelid" value="<?php echo $map_id;?>"/>
+<?php
 		        	$get_map_structure = $map['map_structure'];
 		        	$map_structure = unserialize($get_map_structure);
 

@@ -21,9 +21,10 @@ body {
 	    top: 54px;
 	    max-width: 1463px;
 	    border: 1px solid #000000;
+        display: inline-block;
 	}
 		.row {
-			overflow: hidden;
+			float: left;
 			display: block;
 		}
 
@@ -35,9 +36,22 @@ body {
 			    position: relative;
 			}
 			
+			.box.rot_0 img {
+				transform: rotate(0deg);
+			}
+			.box.rot_90 img {
+				transform: rotate(90deg);
+			}
+			.box.rot_180 img {
+				transform: rotate(180deg);
+			}
+			.box.rot_270 img {
+				transform: rotate(270deg);
+			}
 
 			div#char-img {
-			    padding: 10px;
+			    width: 100%;
+    			height: 100%;
 			}
 
 				div#char-img img {
@@ -45,6 +59,12 @@ body {
 					height: 100%;
 					padding: 0;
 					position: static;
+				}
+
+				div#char-img img.char_overlay {
+				    position: absolute;
+				    top: 0;
+				    left: 0;
 				}
 
 			/* Box Types */
@@ -63,20 +83,30 @@ body {
 					background-color: black;
 				}
 				.box.forest {
-					background-color: green;
+					background-color: #2e6d00;
 				}
 				.box.grassland{
-					background-color: lightgreen;
+					background-color: #79bb7d;
 				}
 				.box.road{
-					background-color: lightgrey;
+					background-color: #9c8d8d;
 				}
 				.box.water{
-					background-color: blue;
+					background-color: #2e6db0;
 				}
 				.box.plains{
-					background-color: yellow;
+					background-color: #f0bb7d;
 				}
+				.box.sand{
+					background-color: #ebe892;
+				}
+				.box.lava{
+					background-color: #8a0d0d;
+				}
+				.box.ash{
+					background-color: #584f58;
+				}
+
 
 			/* Box Contents */
 				.box img {
@@ -97,6 +127,7 @@ body {
 				    padding: 3px;
 				    color: #ffffff;
 				    z-index: 1;
+				    font-size: 12px;
 				}
 				.box:hover .name {
 					display: block;
@@ -105,7 +136,7 @@ body {
 				.box .health {
 					display: none;
 				    width: 10px;
-				    background-color: #000000;
+				    background-color: #ffffff;
 				    position: absolute;
 				    left: 0;
 				    bottom: 0;
@@ -118,10 +149,62 @@ body {
 					.health > div {
 					    width: 100%;
 					    height: 5px;
-					    background-color: green;
+					    background-color: rgba(0, 128, 0, 0.33);
 					    border-top: 1px solid #000000;
 				        box-sizing: border-box;
 					}
+					.health > div:nth-of-type(n+15){
+						position: absolute;
+					}
+					.health > div:nth-of-type(15){
+						position: static;
+					}
+					.health > div:nth-of-type(16), .health > div:nth-of-type(31) {
+					    top: 0;
+					}
+					.health > div:nth-of-type(17), .health > div:nth-of-type(32){
+						top: 5px;
+					}
+					.health > div:nth-of-type(18), .health > div:nth-of-type(33){
+						top: 10px;
+					}
+					.health > div:nth-of-type(19), .health > div:nth-of-type(34){
+						top: 15px;
+					}
+					.health > div:nth-of-type(20), .health > div:nth-of-type(35){
+						top: 20px;
+					}
+					.health > div:nth-of-type(21), .health > div:nth-of-type(36){
+						top: 25px;
+					}
+					.health > div:nth-of-type(22), .health > div:nth-of-type(37){
+						top: 30px;
+					}
+					.health > div:nth-of-type(23), .health > div:nth-of-type(38){
+						top: 35px;
+					}
+					.health > div:nth-of-type(24), .health > div:nth-of-type(39){
+						top: 40px;
+					}
+					.health > div:nth-of-type(25), .health > div:nth-of-type(40){
+						top: 45px;
+					}
+					.health > div:nth-of-type(26), .health > div:nth-of-type(41){
+						top: 50px;
+					}
+					.health > div:nth-of-type(27), .health > div:nth-of-type(42){
+						top: 55px;
+					}
+					.health > div:nth-of-type(28), .health > div:nth-of-type(43){
+						top: 60px;
+					}
+					.health > div:nth-of-type(29), .health > div:nth-of-type(44){
+						top: 65px;
+					}
+					.health > div:nth-of-type(30), .health > div:nth-of-type(45){
+						top: 70px;
+					}
+
 
 				.box .attack {
 					display: none;
@@ -155,11 +238,25 @@ body {
 					text-shadow: 0px 0px 3px blue;
 				}
 
+	/* Loading */
+
+		div#loading {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    z-index: 3;
+		    background-color: rgba(0,0,0,1);
+		    display: none;
+		    text-align: center;
+		    color: #ffffff;
+		}
 
 	/* Dead */
 
 		div#dead {
-		    position: absolute;
+		    position: fixed;
 		    top: 0;
 		    left: 0;
 		    width: 100%;
@@ -174,7 +271,7 @@ body {
 	/* Complete */
 
 		div#complete {
-		    position: absolute;
+		    position: fixed;
 		    top: 0;
 		    left: 0;
 		    width: 100%;
@@ -183,6 +280,20 @@ body {
 		    background-color: rgba(0,0,0,0.5);
 		    display: none;
 		    text-align: center;
+		}
+
+	/* Final */
+	
+		div#final {
+		    position: fixed;
+		    top: 0;
+		    left: 0;
+		    width: 100%;
+		    height: 100%;
+		    z-index: 2;
+		    background-color: rgba(0,0,0,0.5);
+		    text-align: center;
+		    color: #ffffff;
 		}
 
 	/* Player */
@@ -205,7 +316,7 @@ body {
 			    height: 30px;
 			}				
 
-				div#player > div:not(.menu) div {
+				.bar div {
 					height: 30px;
 					width: 30px;
 					padding: 2px;
@@ -214,21 +325,97 @@ body {
 					border: 1px solid #000000;
 					border-left: 0;
 				}
-				div#player > div:not(.menu) div:first-of-type {
+				.bar div:first-of-type {
 					border-left: 1px solid #000000;
+				}				
+				.bar div:nth-of-type(11), .bar div:nth-of-type(21), .bar div:nth-of-type(31) {
+				    position: absolute;
+				    top: 0;
+				    left: 0;
+				}
+				.bar div:nth-of-type(12), .bar div:nth-of-type(22), .bar div:nth-of-type(32) {
+				    position: absolute;
+				    top: 0;
+				    left: 30px;
+				}
+				.bar div:nth-of-type(13), .bar div:nth-of-type(23), .bar div:nth-of-type(33) {
+				    position: absolute;
+				    top: 0;
+				    left: 60px;
+				}
+				.bar div:nth-of-type(14), .bar div:nth-of-type(24), .bar div:nth-of-type(34) {
+				    position: absolute;
+				    top: 0;
+				    left: 90px;
+				}
+				.bar div:nth-of-type(15), .bar div:nth-of-type(25), .bar div:nth-of-type(35) {
+				    position: absolute;
+				    top: 0;
+				    left: 120px;
+				}
+				.bar div:nth-of-type(16), .bar div:nth-of-type(26), .bar div:nth-of-type(36) {
+				    position: absolute;
+				    top: 0;
+				    left: 150px;
+				}
+				.bar div:nth-of-type(17), .bar div:nth-of-type(27), .bar div:nth-of-type(37) {
+				    position: absolute;
+				    top: 0;
+				    left: 180px;
+				}
+				.bar div:nth-of-type(18), .bar div:nth-of-type(28), .bar div:nth-of-type(38) {
+				    position: absolute;
+				    top: 0;
+				    left: 210px;
+				}
+				.bar div:nth-of-type(19), .bar div:nth-of-type(29), .bar div:nth-of-type(39) {
+				    position: absolute;
+				    top: 0;
+				    left: 240px;
+				}
+				.bar div:nth-of-type(20), .bar div:nth-of-type(30), .bar div:nth-of-type(40) {
+				    position: absolute;
+				    top: 0;
+				    left: 270px;
+				}
+				.bar div:nth-of-type(1),
+				.bar div:nth-of-type(2),
+				.bar div:nth-of-type(3),
+				.bar div:nth-of-type(4),
+				.bar div:nth-of-type(5),
+				.bar div:nth-of-type(6),
+				.bar div:nth-of-type(7),
+				.bar div:nth-of-type(8),
+				.bar div:nth-of-type(9),
+				.bar div:nth-of-type(10) {
+				    position: static;
 				}
 
+
 			div#player .health > div {
-				background-color: red;
+				background-color: rgba(255,0,0,0.33);
 			}
 			div#player .attack > div {
-				background-color: grey
+				background-color: rgba(128, 128, 128, 0.33);
 			}
 			div#player .defence > div {
-				background-color: lightblue
+				background-color: rgba(173, 216, 230,0.33);
 			}
 			div#player .movement > div {
-				background-color: yellow
+				background-color: rgba(255, 255, 0, 0.33);
+			}
+
+			.health.bar > div {
+				background-color: rgba(255,171,171,1);
+			}
+			.attack.bar > div {
+				background-color: rgba(213, 213, 213, 1);
+			}
+			.defence.bar > div {
+				background-color: rgba(228,242,247,1);
+			}
+			.movement.bar > div {
+				background-color: rgba(255, 255, 171, 1);
 			}
 
 			div#player .menu > div.button {
@@ -259,6 +446,7 @@ body {
 			    border: 1px solid #000000;
 			    border-top: 0;
 			    display: none;
+			    min-width: 300px;
 			}
 
 				div#player .equipment .equip_cont {
@@ -282,7 +470,17 @@ body {
 						    height: 80px;
 						    position: absolute;
 						    background: brown;
+					        padding: 10px;
+    						box-sizing: border-box;
+    						background: url('../images/equipment_bg.png');
 						}
+							div#player .equipment .equip_cont .equip_items > div img {
+							    width: 100%;
+							    height: 100%;
+						        background: rgba(0,0,0,0.5);
+					            border: 1px solid #444;
+								box-sizing: border-box;
+							}
 
 						div#equip_helmet {
 						    top: 0;
@@ -324,7 +522,7 @@ body {
 	/* New Reward */
 
 	div.new-reward{
-		position: absolute;
+		position: fixed;
 	    top: 0;
 	    left: 0;
 	    width: 100%;
@@ -332,5 +530,86 @@ body {
 	    z-index: 2;
 	    background-color: rgba(0,0,0,0.75);
 	    display: none;
+        text-align: center;
+    	color: #ffffff;
 	}
 		
+
+
+
+
+/* Mobile */
+
+	@media screen and (max-width: 1550px){
+		div#player {
+			height: 84px;
+		}
+
+			div#player > div {
+			    width: 175px;
+			}
+				.bar div:nth-of-type(6) { 
+					border-left: 1px solid #000000;
+				}
+
+			div#player > div.menu {
+			    float: right;
+			    width: auto;
+		        min-width: 300px;
+			}
+				div#player .menu .equipment {
+				    left: auto;
+				    right: 0;
+				}
+
+		#proto-map {
+		    top: 84px;
+		}
+
+			.box {
+			    width: 60px;
+			    height: 60px;
+			}
+	}
+
+	@media screen and (max-width: 1200px){
+		div#player > div.menu {
+		    min-width: 150px;
+		}
+
+			div#player .menu > div.button {
+			    width: 100%;
+			}
+			div#player .menu > div.button:first-of-type {
+				border-right: 1px solid #000000;
+				border-bottom: 0;
+			}
+
+				div#player .menu .equipment {
+				    border-top: 1px solid #000000;
+				}
+
+		.box {
+		    width: 45px;
+		    height: 45px;
+		}
+
+		.box .hit, .box .block {
+		    width: 45px;
+		    height: 45px;
+		    font-size: 12px;
+		    box-sizing: border-box;
+		}
+	}
+
+	@media screen and (max-width: 900px){
+
+	}
+
+	@media screen and (max-width: 750px){
+
+	}
+
+	@media screen and (max-width: 450px){
+
+	}

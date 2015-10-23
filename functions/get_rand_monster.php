@@ -16,7 +16,7 @@
 			$monster_attack = $get_monster['monster_attack'];
 			$monster_chance = $get_monster['monster_chance'];
 
-			array_push($monsters, array(
+			$monsters[$monster_id] = array(
 				'monster_id' => $monster_id,
 				'monster_name' => $monster_name,
 				'monster_image' => $monster_image,
@@ -24,7 +24,7 @@
 				'monster_defence' => $monster_defence,
 				'monster_attack' => $monster_attack,
 				'monster_chance' => $monster_chance
-			));
+			);
 
 		}
 	}
@@ -41,13 +41,15 @@
 	for($i = 0; $i < $remaining; $i++) {
 		array_push($probability, '0');
 	}
+	
 	$rand = rand(1,count($probability))-1;
 	$chosen_prob = $probability[$rand];
+
 	if($chosen_prob == 0){
 		echo '0';
 	}
 	else {
-		$chosen_monster = $monsters[$chosen_prob-1];
+		$chosen_monster = $monsters[$chosen_prob];
 		echo json_encode($chosen_monster);
 	}
 ?>

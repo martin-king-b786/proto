@@ -10,13 +10,14 @@
 		while ($get_reward = $get_rewards->fetch_assoc()) {
 			$reward_id = $get_reward['reward_id'];
 			$reward = unserialize($get_reward['reward']);
+			
 			$reward_chance = $get_reward['reward_chance'];
 
-			array_push($rewards, array(
+			$rewards[$reward_id] = array(
 				'reward_id' => $reward_id,
 				'reward' => $reward,
 				'reward_chance' => $reward_chance
-			));
+			);
 
 		}
 	}

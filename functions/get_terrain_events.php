@@ -36,10 +36,8 @@
 	if($chosen_prob == 0){
 		echo '0';
 	}
-
 	else {
-		$chosen_event = $events[$chosen_prob-1];
-
-		echo $chosen_event['event_id'];
+		$chosen_event = $chosen_prob;
+		echo $chosen_event;
 	}
 ?>
