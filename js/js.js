@@ -287,7 +287,6 @@ function addMonster(monster_tier){
 	        console.log(error);
 	    },
 	    success: function(data) {
-	    	console.log(data);
 	    	if(data !== '0'){
 		    	monster = JSON.parse(data);
 		    	var healthHTML = '';
@@ -307,12 +306,13 @@ function addMonster(monster_tier){
 		    	jQuery(actualCell).addClass('event');
 		    	jQuery(actualCell).attr('data-event-type','monster');
 		    	jQuery(actualCell).attr('data-reward-level',monster_tier);
+		    	jQuery(actualCell).addClass('t'+monster_tier+'monster');
 		    }
 	    }
 	});
 }
 
-function addReward(reward_tier){
+function addReward(reward_tier,object){
 	jQuery.ajax({
 	    type: "POST",
 	    url: './functions/get_reward.php',
@@ -327,7 +327,7 @@ function addReward(reward_tier){
 				var reward_name = received_reward.reward.name;
 				var reward_type = received_reward.reward.type;
 				jQuery('#proto-map').append('<div class="new-reward overlay"></div>');
-
+				jQuery(object).addClass('t'+reward_tier+'loot');
 				if(reward_type === "modifier"){
 					jQuery('#proto-map .new-reward').append(''+
 						'<input type="hidden" name="modifier-health" value="'+received_reward.reward.stats.health+'"/>'+
@@ -548,7 +548,6 @@ function acceptItem(character){
 	setTimeout(function(){
 		jQuery('.new-reward').remove();
 	},1000);
-	console.log(character);
 }
 
 function checkDead(character){
@@ -561,7 +560,7 @@ function checkDead(character){
 	}
 	jQuery('.box[data-event-type="monster"]').each(function(){
 		var monsterHealth = parseInt(jQuery(this).find('.health').children('div').length);
-		if(monsterHealth <= 0){
+		if(monsterHealth <= 0 && !jQuery(this).hasClass('noloot')){
 			jQuery(this).html('');
 			jQuery(this).attr('data-event-type','');
 			jQuery(this).removeClass('event');
@@ -570,28 +569,103 @@ function checkDead(character){
 			var current_cell_vert = jQuery(this).attr('data-map-cell-vertical');
 			var tier = jQuery(this).attr('data-reward-level');
 			addReward(tier);
+			jQuery(this).addClass('t'+tier+'monster');
 		}
 	});
 }
 
-function triggerEvent(terrain_type){
+function eventModifiers(object) {
+	var possibilities = [
+		'noloot',
+		't1loot',
+		't2loot',
+		't3loot',
+		't4loot',
+		't5loot',
+		'nomonster',
+		't1monster',
+		't2monster',
+		't3monster',
+		't4monster',
+		't5monster'
+	];
+
+	var types = [
+		'loot',
+		'monster'
+	];
+
+	var returnargs = {};
+	var countLoot = 0;
+	var countMonsters = 0;
+	var highestMonster = '';
+
+	for(i = 0; i < possibilities.length; i++){
+		if(object.hasClass(possibilities[i])){
+			for(j = 0; j < types.length; j++){
+				if(possibilities[i].indexOf(types[j]) >= 0){
+					if(types[j] === 'loot'){
+						if(!countLoot >= 1){
+							returnargs[types[j]] = [possibilities[i]];
+							countLoot++;
+						}
+						else {
+							console.log('copyloot');
+							for(k = 0; k < possibilities.length; k++){
+								if(possibilities[k].indexOf('loot') >=0){
+									jQuery(object).removeClass(possibilities[k]);
+								}
+							}
+							jQuery(object).addClass('noloot');
+							returnargs['loot'] = 'noloot';
+						}
+					}
+					else if(types[j] === 'monster') {
+						if(!countMonsters >= 1){
+							returnargs[types[j]] = [possibilities[i]];
+							countMonsters++;
+						}
+						else {
+							highestMonster = possibilities[i];
+						}
+					}
+				}
+			}
+		}
+	}
+	if(highestMonster){
+		console.log(possibilities);
+		for(l = 0; l < possibilities.length; l++){
+			if(possibilities[l].indexOf('monster') >=0){
+				jQuery(object).removeClass(possibilities[l]);
+			}
+		}
+		jQuery(object).addClass(highestMonster);
+		returnargs['monster'] = highestMonster;
+	}
+	return JSON.stringify(returnargs);
+}
+
+function triggerEvent(terrain_type, args, object){
+	var jsonArgs = JSON.stringify(args);
 	jQuery.ajax({
 	    type: "POST",
 	    url: './functions/get_terrain_events.php',
-	    data:{terrain_id: terrain_type},
+	    data:{terrain_id: terrain_type, args: args},
 	    timeout: 2000,
 	    error: function(request,error) {
 	        console.log(error);
 	    },
 	    success: function(data) {
+	    	console.log(data);
 	    	if(data){
-		    	getEventFunction(data);
+		    	getEventFunction(data, object);
 		    }
 	    }
 	});
 }
 
-function getEventFunction(event_id) {
+function getEventFunction(event_id, object) {
 	jQuery.ajax({
 	    type: "POST",
 	    url: './functions/get_event_function.php',
@@ -611,21 +685,25 @@ function getEventFunction(event_id) {
 			    },
 			    success: function(data) {
 			    	if(data) {
-						triggerFunction([data]);
+						triggerFunction([data], object);
 					}
 			    }
 			});
 	    }
 	});	
 }
-function triggerFunction(functionName){
+function triggerFunction(functionName, object){
 	var trueFunction = functionName[0];
-	window[trueFunction]();
+	if(trueFunction.indexOf('Reward')){
+		window[trueFunction](object);
+	}
+	else {
+		window[trueFunction]();
+	}
 }
 
 function checkForEnd(){
 	if(jQuery('.box.end.current').length){
-
 		jQuery('#complete').fadeIn();
 		jQuery('#complete').addClass('overlay');
 	}
@@ -801,10 +879,11 @@ jQuery(document).ready(function(){
 			if(movement <= 0) {
 				movement = 1;
 			}
-
+			var currentbox = jQuery('.box[data-map-row="'+box_row+'"][data-map-cell="'+box_cell+'"][data-map-cell-vertical="'+box_cell_vert+'"]');
 			var terrain = move(box_row, box_cell, box_cell_vert, movement);
 			charImg(character);
-			triggerEvent(terrain);
+			var cureventModifiers = eventModifiers(currentbox);
+			triggerEvent(terrain, cureventModifiers, currentbox);
 			randomAdjacentTile();
 			checkForEnd();
 		});
@@ -855,43 +934,96 @@ jQuery(document).ready(function(){
 								if(total_diff <= movement && total_diff 
 									|| total_diff_vert <= movement && total_diff_vert
 								){
+									var rowDiff = current_row - box_row;
+									var cellDiff = current_cell - box_cell;
 
+									var cellDir = 0;
+									if(rowDiff > 0){
+										cellDir = 1;
+									}
+									else if(rowDiff < 0){
+										cellDir = 3;
+									}
+									else if(cellDiff > 0){
+										cellDir = 4;
+									}
+									else if(cellDiff < 0){
+										cellDir = 2;
+									}
+
+									var dirClass = 'rot_'+((cellDir-1) * 90);
+									
 									var attackMonster = attack(box_row, box_cell, box_cell_vert, character);
 
 									var playerAttack = attackMonster[0].playerHit;
 									var monsterAttack = attackMonster[1].monsterHit;
 
 									var monsterBox = jQuery('.box[data-map-row="'+box_row+'"][data-map-cell="'+box_cell+'"][data-map-cell-vertical="'+box_cell_vert+'"]')
+									
+									jQuery(monsterBox).removeClass('rot_0');
+									jQuery(monsterBox).removeClass('rot_90');
+									jQuery(monsterBox).removeClass('rot_180');
+									jQuery(monsterBox).removeClass('rot_270');
+									jQuery(monsterBox).addClass(dirClass);
 
-									if(playerAttack) {
-										jQuery(monsterBox).append('<div class="hit">Hit for '+playerAttack+'</div>');
-										jQuery(monsterBox).children('.hit').addClass('fade');
-									}
-									else {
-										jQuery(monsterBox).append('<div class="block">Blocked</div>');
-										jQuery(monsterBox).children('.block').addClass('fade');
-									}
+									jQuery('.box.current').removeClass('rot_0');
+									jQuery('.box.current').removeClass('rot_90');
+									jQuery('.box.current').removeClass('rot_180');
+									jQuery('.box.current').removeClass('rot_270');
+									jQuery('.box.current').addClass(dirClass);
 
-									if(monsterAttack) {
-										jQuery('.box.current').append('<div class="hit">Hit for '+monsterAttack+'</div>');
-										jQuery('.box.current').children('.hit').addClass('fade');
-									}
-									else {
-										jQuery('.box.current').append('<div class="block">Blocked</div>');
-										jQuery('.box.current').children('.block').addClass('fade');
-									}
-
+									setTimeout(function(){
+										if(playerAttack) {
+											jQuery(monsterBox).append('<div class="hit">Hit for '+playerAttack+'</div>');
+											jQuery(monsterBox).children('.hit').addClass('fade');
+										}
+										else {
+											jQuery(monsterBox).append('<div class="block">Blocked</div>');
+											jQuery(monsterBox).children('.block').addClass('fade');
+											jQuery(monsterBox).addClass('blockanim');
+										}
+										jQuery('.box.current').addClass('hitanim');
+										setTimeout(function(){
+											jQuery('.box.current').removeClass('hitanim');
+											jQuery(monsterBox).removeClass('blockanim');
+										},375);
+									},0);
+									setTimeout(function(){
+										if(monsterAttack) {
+											jQuery('.box.current').append('<div class="hit">Hit for '+monsterAttack+'</div>');
+											jQuery('.box.current').children('.hit').addClass('fade');
+										}
+										else {
+											jQuery('.box.current').append('<div class="block">Blocked</div>');
+											jQuery('.box.current').children('.block').addClass('fade');
+											jQuery('.box.current').addClass('blockanim');
+										}
+										jQuery(monsterBox).addClass('hitanim');
+										setTimeout(function(){
+											jQuery(monsterBox).removeClass('hitanim');
+											jQuery('.box.current').removeClass('blockanim');
+										},375);
+									},375);
 									setTimeout(function(){
 										jQuery(monsterBox).find('.hit').remove();
 										jQuery(monsterBox).find('.block').remove();
+
+										jQuery('.box.current').find('.hit').remove();
+										jQuery('.box.current').find('.block').remove();
+
+										jQuery('.box').removeClass('blockanim');
+										jQuery('.box').removeClass('hitanim');
+
 										checkDead(character);
-									},1000);
+									},750);
 								}
 							}
 							else {
+								var currentbox = jQuery('.box[data-map-row="'+box_row+'"][data-map-cell="'+box_cell+'"][data-map-cell-vertical="'+box_cell_vert+'"]');
 								var terrain = move(box_row, box_cell, box_cell_vert, movement);
 								charImg(character);
-								triggerEvent(terrain);
+								var cureventModifiers = eventModifiers(currentbox);
+								triggerEvent(terrain, cureventModifiers,currentbox);
 								randomAdjacentTile();
 								checkForEnd();
 							}
@@ -957,29 +1089,56 @@ jQuery(document).ready(function(){
 				jQuery(monsterBox).removeClass('rot_270');
 				jQuery(monsterBox).addClass(dirClass);
 
-				if(playerAttack) {
-					jQuery(monsterBox).append('<div class="hit">Hit for '+playerAttack+'</div>');
-					jQuery(monsterBox).children('.hit').addClass('fade');
-				}
-				else {
-					jQuery(monsterBox).append('<div class="block">Blocked</div>');
-					jQuery(monsterBox).children('.block').addClass('fade');
-				}
+				jQuery('.box.current').removeClass('rot_0');
+				jQuery('.box.current').removeClass('rot_90');
+				jQuery('.box.current').removeClass('rot_180');
+				jQuery('.box.current').removeClass('rot_270');
+				jQuery('.box.current').addClass(dirClass);
 
-				if(monsterAttack) {
-					jQuery('.box.current').append('<div class="hit">Hit for '+monsterAttack+'</div>');
-					jQuery('.box.current').children('.hit').addClass('fade');
-				}
-				else {
-					jQuery('.box.current').append('<div class="block">Blocked</div>');
-					jQuery('.box.current').children('.block').addClass('fade');
-				}
-
+				setTimeout(function(){
+					if(playerAttack) {
+						jQuery(monsterBox).append('<div class="hit">Hit for '+playerAttack+'</div>');
+						jQuery(monsterBox).children('.hit').addClass('fade');
+					}
+					else {
+						jQuery(monsterBox).append('<div class="block">Blocked</div>');
+						jQuery(monsterBox).children('.block').addClass('fade');
+						jQuery(monsterBox).addClass('blockanim');
+					}
+					jQuery('.box.current').addClass('hitanim');
+					setTimeout(function(){
+						jQuery('.box.current').removeClass('hitanim');
+						jQuery(monsterBox).removeClass('blockanim');
+					},375);
+				},0);
+				setTimeout(function(){
+					if(monsterAttack) {
+						jQuery('.box.current').append('<div class="hit">Hit for '+monsterAttack+'</div>');
+						jQuery('.box.current').children('.hit').addClass('fade');
+					}
+					else {
+						jQuery('.box.current').append('<div class="block">Blocked</div>');
+						jQuery('.box.current').children('.block').addClass('fade');
+						jQuery('.box.current').addClass('blockanim');
+					}
+					jQuery(monsterBox).addClass('hitanim');
+					setTimeout(function(){
+						jQuery(monsterBox).removeClass('hitanim');
+						jQuery('.box.current').removeClass('blockanim');
+					},375);
+				},375);
 				setTimeout(function(){
 					jQuery(monsterBox).find('.hit').remove();
 					jQuery(monsterBox).find('.block').remove();
+
+					jQuery('.box.current').find('.hit').remove();
+					jQuery('.box.current').find('.block').remove();
+
+					jQuery('.box').removeClass('blockanim');
+					jQuery('.box').removeClass('hitanim');
+
 					checkDead(character);
-				},1000);
+				},750);
 			}
 		});
 

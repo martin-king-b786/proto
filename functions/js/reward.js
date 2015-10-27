@@ -1,12 +1,12 @@
-function addRewardT1() {
-	addReward(1);
+function addRewardT1(object) {
+	addReward(1,object);
 }
-function addRewardT2() {
-	addReward(2);
+function addRewardT2(object) {
+	addReward(2,object);
 }
-function addRewardT3() {
-	addReward(3);
+function addRewardT3(object) {
+	addReward(3,object);
 }
-function addRewardT4() {
-	addReward(4);
+function addRewardT4(object) {
+	addReward(4,object);
 }
