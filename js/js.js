@@ -184,16 +184,23 @@ function move(tile_row, tile_cell, tile_cell_vert, movement, character){
 	var diff_cell = Math.abs(current_cell - tile_cell);
 	var diff_cell_vert = Math.abs(current_cell_vert - tile_cell_vert);
 
-	var total_diff =  Math.abs(diff_row + diff_cell);
+	//var total_diff =  Math.abs(diff_row + diff_cell);
 	var total_diff_vert = Math.abs(diff_row + diff_cell_vert);
 	var newCell = jQuery('.box[data-map-row="'+tile_row+'"][data-map-cell="'+tile_cell+'"][data-map-cell-vertical="'+tile_cell_vert+'"]');
 
 	var rowDiff = current_row - tile_row;
 	var cellDiff = current_cell - tile_cell;
 
-	if(!jQuery(newCell).hasClass('water') && !jQuery(newCell).hasClass('lava')) {
-		if(total_diff <= movement && total_diff 
-			|| total_diff_vert <= movement && total_diff_vert
+	if(
+		!jQuery(newCell).hasClass('water') &&
+	 	!jQuery(newCell).hasClass('watert2') &&
+	 	!jQuery(newCell).hasClass('watert3') &&
+	 	!jQuery(newCell).hasClass('lava') &&
+	 	!jQuery(newCell).hasClass('lavat2') &&
+	 	!jQuery(newCell).hasClass('lavat3')
+ 	) {
+		if(//total_diff <= movement && total_diff 
+			 total_diff_vert <= movement && total_diff_vert
 		){
 
 			var rowDiff = current_row - tile_row;
