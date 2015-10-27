@@ -85,7 +85,7 @@
 					map_cell
 				) VALUES (
 					NULL, 
-					3 ,
+					4,
 					$value,
 					$row,
 					$cell

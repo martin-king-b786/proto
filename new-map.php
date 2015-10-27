@@ -4,7 +4,7 @@
 		<div id="content">
 			<form method="post" id="form">
 <?php
-			if($get_map = mysqli_query($con, "SELECT * FROM map where map_id = 3")) {
+			if($get_map = mysqli_query($con, "SELECT * FROM map where map_id = 4")) {
 		        while ($map = $get_map->fetch_assoc()) {
 		        	$get_map_structure = $map['map_structure'];
 		        	$map_structure = unserialize($get_map_structure);
@@ -42,7 +42,7 @@
 
 											if($i+1 === intval($map_start['start_row']) && $current_count === intval($map_start['start_cell'])) {
 												$additional_class .= 'start ';
-												$additional_class .= 'current';
+												//$additional_class .= 'current';
 											}
 											if($i+1 === intval($map_end['end_row']) && $current_count === intval($map_end['end_cell'])) {
 												$additional_class .= 'end ';
@@ -104,40 +104,52 @@
 		    }
 /*
 			$array = array(
-				13,
-				13,
-				13,
+				9,
 				array(
+					4,
+					0,
+					4
+				),
+				9,
+				array(
+					3,
+					0,
+					1,
+					0,
 					3
+				),
+				array(
+					1,
+					0,
+					5,
+					0,
+					1
 				),
 				array(
 					3,
 					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
-					0,
+					1,
 					0,
 					3
 				),
-				"width" => 13
+				9,
+				array(
+					4,
+					0,
+					4
+				),
+				9,
+				"width" => 9
 			);
 
 			$serialized = serialize($array);
 		    $start = array(
-		    	'start_row' => '8',
-		    	'start_cell' => '1'
+		    	'start_row' => '5',
+		    	'start_cell' => '5'
 	    	);
 	    	$end = array(
-		    	'end_row' => '1',
-		    	'end_cell' => '19'
+		    	'end_row' => '9',
+		    	'end_cell' => '5'
 	    	);
 	    	$start = serialize($start);
 	    	$end = serialize($end);

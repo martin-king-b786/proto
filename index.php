@@ -41,7 +41,7 @@
 			</div>
 			<div id="proto-map">
 <?php
-			if($get_map = mysqli_query($con, "SELECT * FROM map ORDER BY map_id LIMIT 1 ")) {
+			if($get_map = mysqli_query($con, "SELECT * FROM map WHERE map_id = 4")) {
 		        while ($map = $get_map->fetch_assoc()) {
 		        	$map_id = $map['map_id'];
 ?>
@@ -67,7 +67,6 @@
 								$cell_no = 0;
 								$cell_divides = count($row_cells);
 								for($cd=0; $cd<$cell_divides; $cd++){
-									
 									$cell_section = $map_structure[$i][$cd];
 									if($cell_section === 0) {
 										$current_count++;
@@ -78,7 +77,8 @@
 <?php
 									}
 									else {
-										for($cs=0; $cs<=$cell_section; $cs++){
+										for($cs=0; $cs<$cell_section; $cs++){
+											$current_count++;
 											$curr_row = $i+1;
 											if($i+1 === intval($map_start['start_row']) && $current_count === intval($map_start['start_cell'])) {
 												$additional_class .= 'start ';
@@ -87,26 +87,30 @@
 											if($i+1 === intval($map_end['end_row']) && $current_count === intval($map_end['end_cell'])) {
 												$additional_class .= 'end ';
 											}
-
+											
 											if($get_terrain = mysqli_query($con, "SELECT * FROM map_terrain WHERE map_id = $map_id AND map_row = $curr_row AND map_cell = $current_count;")) {
 				        						while ($terrain = $get_terrain->fetch_assoc()) {
 			        								$terrain_id = $terrain['terrain_id'];
 			        								$map_terrain_id = $terrain['map_terrain_id'];
 			        								if($get_terrain_tile = mysqli_query($con, "SELECT * FROM terrain_tiles WHERE terrain_id = $terrain_id")) {
+			        									$cell_no++;
 				        								while ($terrain_tile = $get_terrain_tile->fetch_assoc()) {
 				        									$terrain_type_class = strtolower($terrain_tile['terrain_type']);
 ?>
-															<div class="box <?php echo $additional_class.' '.$terrain_type_class;?>" data-map-row="<?php echo $i+1;?>" data-map-cell="<?php echo $cell_no;?>" data-map-cell-vertical="<?php echo $current_count;?>" data-terrain="<?php echo $terrain_id;?>">
+															<div 
+																class="box <?php echo $additional_class.' '.$terrain_type_class;?>" 
+																data-map-row="<?php echo $i+1;?>" 
+																data-map-cell="<?php echo $cell_no;?>" 
+																data-map-cell-vertical="<?php echo $current_count;?>" 
+																data-terrain="<?php echo $terrain_id;?>"
+															>
 															</div>
 <?php
 														}
 													}
 												}
 											}
-
 											$additional_class = '';
-											$current_count++;
-											$cell_no++;
 										}
 									}
 								}

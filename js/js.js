@@ -852,7 +852,6 @@ jQuery(document).ready(function(){
 
 				mapdata[name] = value;
 			});
-
 			jQuery.ajax({
 			    type: "POST",
 			    url: './insert.php',
@@ -952,7 +951,7 @@ jQuery(document).ready(function(){
 									}
 
 									var dirClass = 'rot_'+((cellDir-1) * 90);
-									
+
 									var attackMonster = attack(box_row, box_cell, box_cell_vert, character);
 
 									var playerAttack = attackMonster[0].playerHit;

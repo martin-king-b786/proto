@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2015 at 07:13 PM
+-- Generation Time: Oct 27, 2015 at 05:35 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -74,6 +74,126 @@ INSERT INTO `event_functions` (`event_function_id`, `event_id`, `function_id`) V
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `event_modifiers`
+--
+
+CREATE TABLE IF NOT EXISTS `event_modifiers` (
+  `event_modifier_id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `event_trigger` varchar(50) NOT NULL,
+  `effect_name` varchar(50) NOT NULL,
+  `effect` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `event_modifiers`
+--
+
+INSERT INTO `event_modifiers` (`event_modifier_id`, `event_id`, `event_trigger`, `effect_name`, `effect`) VALUES
+(1, 1, 'monster', 't1monster', -5),
+(2, 2, 'loot', 't1monster', 10),
+(3, 3, 'monster', 't1monster', 5),
+(4, 4, 'loot', 't1monster', 0),
+(5, 5, 'monster', 't1monster', 10),
+(6, 6, 'loot', 't1monster', 0),
+(7, 7, 'monster', 't1monster', 0),
+(8, 8, 'loot', 't1monster', 0),
+(9, 9, 'monster', 't1monster', 0),
+(10, 10, 'loot', 't1monster', 0),
+(11, 1, 'monster', 't2monster', 10),
+(12, 2, 'loot', 't2monster', 10),
+(13, 3, 'monster', 't2monster', 10),
+(14, 4, 'loot', 't2monster', 5),
+(15, 5, 'monster', 't2monster', 10),
+(16, 6, 'loot', 't2monster', 0),
+(17, 7, 'monster', 't2monster', 0),
+(18, 8, 'loot', 't2monster', 0),
+(19, 9, 'monster', 't2monster', 0),
+(20, 10, 'loot', 't2monster', 0),
+(21, 1, 'monster', 't3monster', -5),
+(22, 2, 'loot', 't3monster', 5),
+(23, 3, 'monster', 't3monster', 10),
+(24, 4, 'loot', 't3monster', 5),
+(25, 5, 'monster', 't3monster', 10),
+(26, 6, 'loot', 't3monster', 10),
+(27, 7, 'monster', 't3monster', 5),
+(28, 8, 'loot', 't3monster', 5),
+(29, 9, 'monster', 't3monster', 0),
+(30, 10, 'loot', 't3monster', 0),
+(31, 1, 'monster', 't4monster', -10),
+(32, 2, 'loot', 't4monster', -10),
+(33, 3, 'monster', 't4monster', 5),
+(34, 4, 'loot', 't4monster', -5),
+(35, 5, 'monster', 't4monster', 5),
+(36, 6, 'loot', 't4monster', 0),
+(37, 7, 'monster', 't4monster', 10),
+(38, 8, 'loot', 't4monster', 5),
+(39, 9, 'monster', 't4monster', 5),
+(40, 10, 'loot', 't4monster', 5),
+(41, 1, 'monster', 't5monster', -20),
+(42, 2, 'loot', 't5monster', -15),
+(43, 3, 'monster', 't5monster', -15),
+(44, 4, 'loot', 't5monster', -10),
+(45, 5, 'monster', 't5monster', -5),
+(46, 6, 'loot', 't5monster', -5),
+(47, 7, 'monster', 't5monster', 5),
+(48, 8, 'loot', 't5monster', 5),
+(49, 9, 'monster', 't5monster', 10),
+(50, 10, 'loot', 't5monster', 15),
+(51, 1, 'monster', 't1loot', 15),
+(52, 2, 'loot', 't1loot', -5),
+(53, 3, 'monster', 't1loot', 10),
+(54, 4, 'loot', 't1loot', -5),
+(55, 5, 'monster', 't1loot', 5),
+(56, 6, 'loot', 't1loot', 0),
+(57, 7, 'monster', 't1loot', 0),
+(58, 8, 'loot', 't1loot', 0),
+(59, 9, 'monster', 't1loot', 0),
+(60, 10, 'loot', 't1loot', 0),
+(61, 1, 'monster', 't2loot', 10),
+(62, 2, 'loot', 't2loot', 5),
+(63, 3, 'monster', 't2loot', 10),
+(64, 4, 'loot', 't2loot', -10),
+(65, 5, 'monster', 't2loot', 10),
+(66, 6, 'loot', 't2loot', -5),
+(67, 7, 'monster', 't2loot', 0),
+(68, 8, 'loot', 't2loot', 0),
+(69, 9, 'monster', 't2loot', 0),
+(70, 10, 'loot', 't2loot', 0),
+(71, 1, 'monster', 't3loot', 5),
+(72, 2, 'loot', 't3loot', 5),
+(73, 3, 'monster', 't3loot', 10),
+(74, 4, 'loot', 't3loot', 5),
+(75, 5, 'monster', 't3loot', 10),
+(76, 6, 'loot', 't3loot', -5),
+(77, 7, 'monster', 't3loot', 5),
+(78, 8, 'loot', 't3loot', -5),
+(79, 9, 'monster', 't3loot', 0),
+(80, 10, 'loot', 't3loot', 0),
+(81, 1, 'monster', 't4loot', 0),
+(82, 2, 'loot', 't4loot', 0),
+(83, 3, 'monster', 't4loot', 0),
+(84, 4, 'loot', 't4loot', 0),
+(85, 5, 'monster', 't4loot', 10),
+(86, 6, 'loot', 't4loot', -5),
+(87, 7, 'monster', 't4loot', 10),
+(88, 8, 'loot', 't4loot', -10),
+(89, 9, 'monster', 't4loot', 10),
+(90, 10, 'loot', 't4loot', -5),
+(91, 1, 'monster', 't5loot', 0),
+(92, 2, 'loot', 't5loot', 0),
+(93, 3, 'monster', 't5loot', 0),
+(94, 4, 'loot', 't5loot', 0),
+(95, 5, 'monster', 't5loot', 0),
+(96, 6, 'loot', 't5loot', 0),
+(97, 7, 'monster', 't5loot', 15),
+(98, 8, 'loot', 't5loot', -10),
+(99, 9, 'monster', 't5loot', 15),
+(100, 10, 'loot', 't5loot', -15);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `event_reward`
 --
 
@@ -120,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `map` (
   `map_structure` varchar(5000) NOT NULL,
   `map_start` varchar(250) NOT NULL,
   `map_end` varchar(250) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `map`
@@ -128,7 +248,8 @@ CREATE TABLE IF NOT EXISTS `map` (
 
 INSERT INTO `map` (`map_id`, `map_structure`, `map_start`, `map_end`) VALUES
 (2, 'a:11:{i:0;i:19;i:1;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:2;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:3;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:4;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:5;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:6;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:7;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:8;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}i:9;a:15:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:0;i:9;i:0;i:10;i:0;i:11;i:0;i:12;i:0;i:13;i:0;i:14;i:3;}s:5:"width";i:19;}', 'a:2:{s:9:"start_row";s:1:"8";s:10:"start_cell";s:1:"1";}', 'a:2:{s:7:"end_row";s:1:"1";s:8:"end_cell";s:2:"19";}'),
-(3, 'a:14:{i:0;i:13;i:1;i:13;i:2;i:13;i:3;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:4;i:13;i:5;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:6;i:13;i:7;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:8;i:13;i:9;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:10;i:13;i:11;i:13;i:12;i:13;s:5:"width";i:13;}', 'a:2:{s:9:"start_row";s:2:"13";s:10:"start_cell";s:1:"1";}', 'a:2:{s:7:"end_row";s:1:"7";s:8:"end_cell";s:1:"7";}');
+(3, 'a:14:{i:0;i:13;i:1;i:13;i:2;i:13;i:3;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:4;i:13;i:5;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:6;i:13;i:7;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:8;i:13;i:9;a:9:{i:0;i:3;i:1;i:0;i:2;i:0;i:3;i:0;i:4;i:0;i:5;i:0;i:6;i:0;i:7;i:0;i:8;i:3;}i:10;i:13;i:11;i:13;i:12;i:13;s:5:"width";i:13;}', 'a:2:{s:9:"start_row";s:2:"13";s:10:"start_cell";s:1:"1";}', 'a:2:{s:7:"end_row";s:1:"7";s:8:"end_cell";s:1:"7";}'),
+(4, 'a:10:{i:0;i:9;i:1;a:3:{i:0;i:4;i:1;i:0;i:2;i:4;}i:2;i:9;i:3;a:5:{i:0;i:3;i:1;i:0;i:2;i:1;i:3;i:0;i:4;i:3;}i:4;a:5:{i:0;i:1;i:1;i:0;i:2;i:5;i:3;i:0;i:4;i:1;}i:5;a:5:{i:0;i:3;i:1;i:0;i:2;i:1;i:3;i:0;i:4;i:3;}i:6;i:9;i:7;a:3:{i:0;i:4;i:1;i:0;i:2;i:4;}i:8;i:9;s:5:"width";i:9;}', 'a:2:{s:9:"start_row";s:1:"5";s:10:"start_cell";s:1:"5";}', 'a:2:{s:7:"end_row";s:1:"9";s:8:"end_cell";s:1:"5";}');
 
 -- --------------------------------------------------------
 
@@ -478,35 +599,93 @@ CREATE TABLE IF NOT EXISTS `terrain_event` (
   `terrain_id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL,
   `event_chance` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `terrain_event`
 --
 
 INSERT INTO `terrain_event` (`terrain_event_id`, `terrain_id`, `event_id`, `event_chance`) VALUES
-(1, 8, 1, 15),
-(2, 7, 1, 50),
-(3, 8, 2, 15),
-(4, 7, 2, 15),
-(5, 1, 1, 30),
-(6, 2, 1, 40),
-(7, 3, 7, 100),
-(8, 4, 1, 10),
-(9, 5, 1, 1),
-(10, 6, 1, 10),
-(11, 1, 3, 10),
-(12, 2, 3, 15),
-(13, 4, 3, 40),
+(1, 8, 1, 10),
+(2, 7, 1, 15),
+(3, 8, 2, 5),
+(4, 7, 2, 10),
+(5, 1, 1, 10),
+(6, 2, 1, 15),
+(7, 3, 7, 10),
+(8, 4, 1, 20),
+(9, 5, 1, 0),
+(10, 6, 1, 5),
+(11, 1, 3, 5),
+(12, 2, 3, 10),
+(13, 4, 3, 20),
 (14, 4, 5, 10),
-(15, 5, 3, 19),
-(16, 5, 5, 30),
-(17, 5, 7, 30),
-(18, 6, 3, 25),
-(19, 6, 5, 35),
-(20, 7, 3, 15),
+(15, 5, 3, 5),
+(16, 5, 5, 15),
+(17, 5, 7, 20),
+(18, 6, 3, 10),
+(19, 6, 5, 15),
+(20, 7, 3, 10),
 (21, 7, 5, 5),
-(22, 8, 3, 5);
+(22, 8, 3, 5),
+(23, 1, 5, 1),
+(24, 1, 7, 8),
+(25, 1, 9, 0),
+(26, 1, 2, 10),
+(27, 1, 4, 7),
+(28, 1, 6, 3),
+(29, 1, 8, 0),
+(30, 1, 10, 0),
+(31, 2, 5, 5),
+(32, 2, 7, 1),
+(33, 2, 9, 0),
+(34, 2, 2, 8),
+(35, 2, 4, 7),
+(36, 2, 6, 5),
+(37, 2, 8, 0),
+(38, 2, 10, 0),
+(39, 3, 1, 10),
+(40, 3, 2, 3),
+(41, 3, 3, 15),
+(42, 3, 4, 5),
+(43, 3, 5, 15),
+(44, 3, 6, 2),
+(45, 3, 8, 2),
+(46, 3, 9, 5),
+(47, 3, 10, 3),
+(48, 4, 2, 2),
+(49, 4, 4, 3),
+(50, 4, 6, 4),
+(51, 4, 7, 5),
+(52, 4, 8, 1),
+(53, 4, 9, 1),
+(54, 4, 10, 0),
+(55, 5, 2, 1),
+(56, 5, 4, 1),
+(57, 5, 6, 1),
+(58, 5, 8, 1),
+(59, 5, 9, 15),
+(60, 5, 10, 1),
+(61, 6, 2, 5),
+(62, 6, 4, 10),
+(63, 6, 6, 5),
+(64, 6, 7, 15),
+(65, 6, 8, 4),
+(66, 6, 9, 10),
+(67, 6, 10, 1),
+(68, 7, 4, 5),
+(69, 7, 6, 0),
+(70, 7, 7, 1),
+(71, 7, 8, 0),
+(72, 7, 9, 0),
+(73, 7, 10, 0),
+(74, 8, 4, 0),
+(75, 8, 5, 1),
+(76, 8, 6, 0),
+(77, 8, 7, 0),
+(78, 8, 8, 0),
+(79, 8, 9, 0),
+(80, 8, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -519,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `terrain_tiles` (
   `terrain_type` varchar(50) NOT NULL,
   `terrain_image` varchar(250) NOT NULL,
   `terrain_effect` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `terrain_tiles`
@@ -533,7 +712,23 @@ INSERT INTO `terrain_tiles` (`terrain_id`, `terrain_type`, `terrain_image`, `ter
 (5, 'Lava', '', ''),
 (6, 'Ash', '', ''),
 (7, 'Forest', '', ''),
-(8, 'Road', '', '');
+(8, 'Road', '', ''),
+(9, 'GrasslandT2', '', ''),
+(10, 'PlainsT2', '', ''),
+(11, 'WaterT2', '', ''),
+(12, 'SandT2', '', ''),
+(13, 'LavaT2', '', ''),
+(14, 'AshT2', '', ''),
+(15, 'ForestT2', '', ''),
+(16, 'RoadT2', '', ''),
+(17, 'GrasslandT3', '', ''),
+(18, 'PlainsT3', '', ''),
+(19, 'WaterT3', '', ''),
+(20, 'SandT3', '', ''),
+(21, 'LavaT3', '', ''),
+(22, 'AshT3', '', ''),
+(23, 'ForestT3', '', ''),
+(24, 'RoadT3', '', '');
 
 --
 -- Indexes for dumped tables
@@ -550,6 +745,12 @@ ALTER TABLE `events`
 --
 ALTER TABLE `event_functions`
   ADD PRIMARY KEY (`event_function_id`);
+
+--
+-- Indexes for table `event_modifiers`
+--
+ALTER TABLE `event_modifiers`
+  ADD PRIMARY KEY (`event_modifier_id`);
 
 --
 -- Indexes for table `event_reward`
@@ -614,6 +815,11 @@ ALTER TABLE `events`
 ALTER TABLE `event_functions`
   MODIFY `event_function_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
+-- AUTO_INCREMENT for table `event_modifiers`
+--
+ALTER TABLE `event_modifiers`
+  MODIFY `event_modifier_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
+--
 -- AUTO_INCREMENT for table `event_reward`
 --
 ALTER TABLE `event_reward`
@@ -627,7 +833,7 @@ ALTER TABLE `functions`
 -- AUTO_INCREMENT for table `map`
 --
 ALTER TABLE `map`
-  MODIFY `map_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `map_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `map_terrain`
 --
@@ -647,12 +853,12 @@ ALTER TABLE `rewards`
 -- AUTO_INCREMENT for table `terrain_event`
 --
 ALTER TABLE `terrain_event`
-  MODIFY `terrain_event_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+  MODIFY `terrain_event_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=81;
 --
 -- AUTO_INCREMENT for table `terrain_tiles`
 --
 ALTER TABLE `terrain_tiles`
-  MODIFY `terrain_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `terrain_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
